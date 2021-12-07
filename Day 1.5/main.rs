@@ -1,0 +1,51 @@
+use std::fs::File;
+use std::io::{BufRead, BufReader, Error, ErrorKind, Read};
+
+//https://users.rust-lang.org/t/reading-integers-from-a-file-into-vector/17517
+fn read<R: Read>(io: R) -> Result<Vec<i64>, Error> {
+    let br = BufReader::new(io);
+    br.lines()
+        .map(|line| line.and_then(|v| v.parse().map_err(|e| Error::new(ErrorKind::InvalidData, e))))
+        .collect()
+}
+
+fn main() -> Result<(), Error> {
+    //test, got correct answer.
+    //let report: [i32; 10] = [199, 200, 208, 210, 200, 207, 240, 269, 260, 263];
+    let mut curr = 0;
+    let mut newVal = 0;
+    let mut i = 0;
+    let mut strapp = "(N/A - no previous measurement)";
+    let mut increased = 0;
+    let mut decreased = 0;
+    
+    let report = read(File::open("./input.txt")?)?;
+
+    while i < report.len() - 2{
+        
+        if i == 0{
+            newVal = report[i] + report[i + 1] + report[i + 2];
+        }else{
+            newVal = report[i] + report[i + 1] + report[i + 2];
+
+            if curr < newVal{
+                strapp = "(increased)";
+                increased += 1;
+            }else if curr > newVal{
+                strapp = "(decreased)";
+                decreased += 1;
+            }else{
+                strapp = "(no change)";
+            }
+        }
+        
+        print!("Num: {} {}\n", newVal, strapp);
+        //curr = report[i];
+        curr = report[i] + report[i + 1] + report[i + 2];
+        i += 1;
+    }
+
+    print!("Increased: {} | Decreased: {}\n", increased, decreased);
+
+    Ok(())
+}
