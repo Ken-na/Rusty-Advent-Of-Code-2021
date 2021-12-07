@@ -1,15 +1,24 @@
-//A report so we dont need to account for user input. 
-    //probably nice since i've only done Hello World for rust so far ahah.
+use std::fs::File;
+use std::io::{BufRead, BufReader, Error, ErrorKind, Read};
 
-fn main(){
-    let report: [i32; 10] = [199, 200, 208, 210, 200, 207, 240, 269, 260, 263];
+//https://users.rust-lang.org/t/reading-integers-from-a-file-into-vector/17517
+fn read<R: Read>(io: R) -> Result<Vec<i64>, Error> {
+    let br = BufReader::new(io);
+    br.lines()
+        .map(|line| line.and_then(|v| v.parse().map_err(|e| Error::new(ErrorKind::InvalidData, e))))
+        .collect()
+}
+
+fn main() -> Result<(), Error> {
+    //test, got correct answer.
+    //let report: [i32; 10] = [199, 200, 208, 210, 200, 207, 240, 269, 260, 263];
     let mut curr = 0;
     let mut i = 0;
     let mut strapp = "(N/A - no previous measurement)";
     let mut increased = 0;
     let mut decreased = 0;
     
-    //let mut smaller = false;
+    let report = read(File::open("./input.txt")?)?;
 
     while i < report.len(){
         
@@ -31,8 +40,6 @@ fn main(){
     }
 
     print!("Increased: {} | Decreased: {}\n", increased, decreased);
-    /* needs import of slice library, will try with a pythony while loop
-    for i in range(0, report.len()){
-        println!(report[i]);
-    }*/
+
+    Ok(())
 }
