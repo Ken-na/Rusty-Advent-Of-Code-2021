@@ -54,6 +54,7 @@ fn check_num_against_boards(mut boards: Vec<Board>, num: i32) -> Vec<Board>{
 
     return boards;
 }
+
 fn check_boards_for_winners(boards: Vec<Board>) -> i32{
     let boards_count = boards.len();
     let boards_numbers_count = boards[0].activated.len();
@@ -78,10 +79,6 @@ fn check_boards_for_winners(boards: Vec<Board>) -> i32{
                 return i.try_into().unwrap();
             }
 
-
-            /*if boards[i].numbers[pos] == num {
-                boards[i].activated[pos] = true;
-            }*/
             pos += 1;
         }
     }
@@ -101,8 +98,6 @@ fn count_score(board: Board, winning_num: i32) -> i32{
 
     return score * winning_num;
 }
-
-
 
 fn main() -> Result<(), Error> {
     let input = read(File::open("./input.txt")?)?;
@@ -141,24 +136,30 @@ fn main() -> Result<(), Error> {
 
     //let boards_count
     //run through the read outs. 
-    while i < read_outs.len() && finished == -1{
+    while i < read_outs.len() && boards.len() != 0{
         let num = read_outs[i].parse::<i32>().unwrap();
         //println!("------------ [{}] ------------", i);
         boards = check_num_against_boards(boards, read_outs[i].parse::<i32>().unwrap());
         finished = check_boards_for_winners((& mut *boards).to_vec());
         //print_boards((& mut *boards).to_vec());
 
-        if finished != -1 {
+        while finished != -1{
             score = count_score(boards[finished as usize].clone(), num);
+            if(boards.len() == 1){
+                print_boards((& mut *boards).to_vec());
+            }
+            boards.remove(finished as usize);
+
+            if boards.len() != 0 {
+                finished = check_boards_for_winners((& mut *boards).to_vec());
+            }else{
+                finished = -1;
+            }
         }
         i += 1;
     }
 
-    if finished != -1{
-        println!("------------ [WINNER IS: {}, SCORE OF: {}] ------------", finished + 1, score);
-    }else{
-        println!("------------ [NO WINNER] ------------");
-    }
+    println!("------------ [SCORE OF LAST CARD: {}] ------------", score);
 
     Ok(())
 }
