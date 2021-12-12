@@ -40,8 +40,6 @@ fn main() -> Result<(), Error> {
 
     for i in 0..dirty_vec.len() {
         input.push(dirty_vec[i].parse::<u16>().unwrap());
-
-        //println!("input: {}", input[i]);
     }
 
     print!("Initial State:");
@@ -49,14 +47,8 @@ fn main() -> Result<(), Error> {
 
     for i in 0..days {
         expand_fish(&mut input);
-        //print!("After {} day(s):", (i + 1));
-        //print_fish(&mut input);
         println!("(there are {} lanternfish at day {})", input.len(), i);
     }
-
-
-    //let input: Vec<u16> = dirty_input[0].split(',').collect::Vec<u16>().parse().unwrap();
-    //let input = read(File::open("./input.txt")?)?;
 
     println!("Hell world");
     
