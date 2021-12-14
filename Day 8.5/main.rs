@@ -46,7 +46,6 @@ fn main() -> Result<(), Error> {
         let mut one_chars: Vec<char> = Vec::new();
         let mut four_chars: Vec<char> = Vec::new();
 
-
         let val: Vec<&str> = dirty_input[i].split('|').collect();
         test_input.push(val[0]);
         results_input.push(val[1]);
@@ -87,26 +86,18 @@ fn main() -> Result<(), Error> {
         let c = one_chars[0];
         let f = one_chars[1];
 
-        //println!("C/F {:?}", not_in_common);
-
         let b = not_in_common[0];
         let d = not_in_common[1];
-
-        //println!("B/D {:?}", one_chars);
 
         for k in 0..results_split.len(){
             let split_symbols: Vec<char> = results_split[k].chars().collect();
             if split_symbols.len() == 2 {
-                //print!("{} + ", 1 * 10_u32.pow(((results_split.len() - k - 1) as u32).into()));
                 total += 1 * 10_u32.pow(((results_split.len() - k - 1) as u32).into());
             }else if split_symbols.len() == 4 {
-                //print!("{} + ", 4 * 10_u32.pow(((results_split.len() - k - 1) as u32).into()));
                 total += 4 * 10_u32.pow(((results_split.len() - k - 1) as u32).into());
             }else if split_symbols.len() == 3 {
-                //print!("{} + ", 7 * 10_u32.pow(((results_split.len() - k - 1) as u32).into()));
                 total += 7 * 10_u32.pow(((results_split.len() - k - 1) as u32).into());
             }else if split_symbols.len() == 7 {
-                //print!("{} + ", 8 * 10_u32.pow(((results_split.len() - k - 1) as u32).into()));
                 total += 8 * 10_u32.pow(((results_split.len() - k - 1) as u32).into());
             }else {
                 let mut val: u32 = 0;
@@ -117,19 +108,15 @@ fn main() -> Result<(), Error> {
                 let mut contains_one_b = false; //one 
                 for j in 0..split_symbols.len(){
                     if split_symbols[j] == b {
-                        //print!("(b / four_a {} == {}), ", split_symbols[j], b);
                         contains_four_a = true;
                     }
                     else if split_symbols[j] == d {
-                        //print!("(d / four_b {} == {}), ", split_symbols[j], d);
                         contains_four_b = true;
                     }
                     else if split_symbols[j] == c {
-                        //print!("(c / one_a {} == {}), ", split_symbols[j], c);
                         contains_one_a = true;
                     }
                     else if split_symbols[j] == f {
-                        //print!("(f / one_b {} == {}), ", split_symbols[j], f);
                         contains_one_b = true;
                     }
                 }
@@ -154,11 +141,9 @@ fn main() -> Result<(), Error> {
                 }
 
                 total += val * 10_u32.pow(((results_split.len() - k - 1) as u32).into());
-                //print!("{} + ", new_total);
             }
             
         }
-        //print!("\n\n");
     }
 
     println!("TOTAL: {}", total);
