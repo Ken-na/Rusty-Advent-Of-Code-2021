@@ -11,12 +11,11 @@ fn read<R: Read>(io: R) -> Result<Vec<String>, Error> {
 
 fn main() -> Result<(), Error> {
     let input = read(File::open("./input.txt")?)?;
-    let mut score = 0;
+    let mut scores: Vec<u64> = Vec::new();
 
     for i in 0..input.len(){
         let chars: Vec<char> = input[i].chars().collect();
         let mut open_chars: Vec<char> = Vec::new();
-        let mut new_score = 0;
         let mut corrupt = false;
         if chars[0] == ')' || chars[0] == ']' || chars[0] == '}' || chars[0] == '>' {
             corrupt = true;
@@ -32,15 +31,6 @@ fn main() -> Result<(), Error> {
                             found = true;
                         }
                         if !found{
-                            if chars[j] == ')'{
-                                new_score += 3;
-                            }else if chars[j] == ']'{
-                                new_score += 57;
-                            } else if chars[j] == '}'{
-                                new_score += 1197;
-                            }else if chars[j] == '>'{
-                                new_score += 25137;
-                            }
                             corrupt = true;
                         }else{
                             open_chars.pop();
@@ -48,14 +38,28 @@ fn main() -> Result<(), Error> {
                     }
                 }
             }
-            if corrupt {
-                score += new_score;
-                println!("(bad) {:?} | {}", input[i], new_score);
-            }else{
-                println!("(good) {:?} | {}", input[i], new_score);
+            if !corrupt {
+                let mut new_score: u64 = 0;
+                while open_chars.len() > 0 {
+                    new_score *= 5;
+                    let new_char = open_chars.pop().unwrap();
+                    if new_char == '(' {
+                        new_score += 1;
+                    }else if new_char == '[' {
+                        new_score += 2;
+                    }else if new_char == '{' {
+                        new_score += 3;
+                    }else if new_char == '<' {
+                        new_score += 4;
+                    }
+                }
+                scores.push(new_score);
             }
         }
     }
-    println!("SCORE: {}", score);
+
+    scores.sort();
+
+    println!("MIDDLE SCORE: {}", scores[scores.len() / 2]);
     Ok(())
 }
