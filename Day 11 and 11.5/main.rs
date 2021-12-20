@@ -81,7 +81,7 @@ fn glow(map: &mut [u8; 100], width: usize, pos: usize){
 fn main() -> Result<(), Error> {
     let dirty_input = read(File::open("./input.txt")?)?;
     let mut input_arr: [u8; 100] = [0; 100];
-    let steps = 100;
+    let steps = 1000;
     let width = 10;
     let mut glow_count = 0;
 
@@ -101,6 +101,7 @@ fn main() -> Result<(), Error> {
 
     let mut i = 0;
     while i < steps{
+        let mut all_flash = true;
 
         for j in 0..100 {
             glow(&mut input_arr, width, j);
@@ -110,13 +111,23 @@ fn main() -> Result<(), Error> {
             if input_arr[j] > 9 {
                 input_arr[j] = 0;
                 glow_count += 1;
-            }            
+            }else {
+                all_flash = false;
+            }          
+        }
+
+        //part 2
+        if all_flash{
+            println!("\n\nAfter step {} ({} Glows):", i + 1, glow_count);
+            print_map(input_arr, width);
+            break;
         }
 
         i += 1;
 
-        println!("\n\nAfter step {} ({} Glows):", i, glow_count);
-        print_map(input_arr, width);
+        //Part 1.
+        //println!("\n\nAfter step {} ({} Glows):", i, glow_count);
+        //print_map(input_arr, width);
     }
     Ok(())
 }
